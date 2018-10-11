@@ -57,10 +57,11 @@ def mixAllfade(dir = DIR,   ext = '.mp3', fileName = 'mixedOutput'):
         mix += '[chord%s]' % str(i+1)
         musicTime += int(WHOLENOTE/int(notes[i][1]))
 
-    cmd =  'ffmpeg %s -filter_complex "%s [0]%samix=%s" %s%s%s' % (chords, delays, mix, lenNotes+1, DIR, fileName, ext)
+    cmd =  'ffmpeg %s -filter_complex "%s [0]%s amix=%s" %s%s%s' % (chords, delays, mix, lenNotes+1, DIR, fileName, ext)
     print(cmd)
 
     #   calling window OS cmd line to run function
     subprocess.call(cmd, shell=True)
+
 
 
