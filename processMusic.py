@@ -4,9 +4,9 @@ import subprocess
 
 DIR = r'/home/runan/Documents/mesical/clips/'
 NOTES = [1, 0.5, .25, 0.125, 0.0625]  # whole nte, half, quarter, 1/8, .0625
-TAIL = 0.05 #in seconds
+TAIL = 0.1 #in seconds
 
-def musicNoteFiles(filePath=DIR, fileName='piano', ext='.mp3'):
+def musicNoteFiles(filePath='%sMAIN/'% DIR, fileName='piano', ext='.mp3'):
     '''
     :param filePath: Input the file directory of published files
     :param fileName: file name of assets, eg. CHAR001_Model_v001
@@ -52,7 +52,7 @@ def createNotes(bpm = 120):
         # print(numFrames)
         for music in musicFiles:
             name = music.split('/')[-1].split('.')[0]
-            cmd = "ffmpeg -i %s -ss 0 -t %s -c copy %s%s.mp3"% (music, sec, name, i)
+            cmd = "ffmpeg -i %s -ss 0 -t %s -c copy %s%s%s.mp3"% (music, sec, DIR, name, i)
             #print(cmd)
             subprocess.call(cmd, shell=True)
 

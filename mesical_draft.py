@@ -3,11 +3,11 @@ import subprocess
 
 TMPDIR = r'/home/runan/Documents/mesical/temp/'
 DIR = r'/home/runan/Documents/mesical/clips/'
-MUSIC = ('D1 CS1 D1 D1 CS1 A1 E1 FS1 D1 D1 CS1 B1 CS1 FS1 A1 B1 G1 FS1 E1 G1 FS1 E1 D1 CS1 B1 A1 G1 FS1 E1 G1 FS1 E1 G1 FS1 E1 G1 FS1 E1 D1 E1 FS1 G1 A1 E1 A1 G1 FS1 B1 G1 A1 G1 D1 B1 B1 CS1 D1 CS1 B1 A1 G1 FS1 E1 B1 A1 B1 A1 G1 FS1 FS1 E1 D1 FS1 B1 A1 B1 CS1 D1 D1 CS1 B1 D1 D1 D1' )
+#MUSIC = ('D1 CS1 D1 D1 CS1 A1 E1 FS1 D1 D1 CS1 B1 CS1 FS1 A1 B1 G1 FS1 E1 G1 FS1 E1 D1 CS1 B1 A1 G1 FS1 E1 G1 FS1 E1 G1 FS1 E1 G1 FS1 E1 D1 E1 FS1 G1 A1 E1 A1 G1 FS1 B1 G1 A1 G1 D1 B1 B1 CS1 D1 CS1 B1 A1 G1 FS1 E1 B1 A1 B1 A1 G1 FS1 FS1 E1 D1 FS1 B1 A1 B1 CS1 D1 D1 CS1 B1 D1 D1 D1' )
 #MUSIC = ('C C G G A A G G F F E E D D C C G G F F E E D D G G F F E E D D C C G G A A G G F F E E D D C C')
-#MUSIC = ('C1 C1 G2 G1 G2 G2 A1 A1 G1')
-#MUSIC = ('A1 B2 C4')
-TAIL = .005#in seconds
+MUSIC = ('C2 C2 G2 G1 G2 G2 A4 F1 G1')
+#MUSIC = ('A1 G1 C1')
+TAIL = .001#in seconds
 
 
 def musicNoteDir(filePath = DIR, ext = '.mp3'):
@@ -64,14 +64,13 @@ def mixAllfade(dir = DIR,   ext = '.mp3', tempDir = TMPDIR, tempName = 'TMP101' 
             pass
         tempOut = '%s%s%s' % (tempDir, tempName, ext)
         if i == 0:
-            cmd = 'ffmpeg -i %s -i %s -filter_complex acrossfade=d=%s:c1=qua:c2=qua -y %s' % (input1, input2, TAIL, tempOut )
+            cmd = 'ffmpeg -i %s -i %s -filter_complex acrossfade=d=%s -y %s' % (input1, input2, TAIL, tempOut )
         elif i == len(notes)-1:
-            cmd = 'ffmpeg -i %s -i %s -filter_complex acrossfade=d=%s:c1=qua:c2=qua -y mixed_audio%s' % (tempOut, input1, TAIL, ext)
+            cmd = 'ffmpeg -i %s -i %s -filter_complex acrossfade=d=%s -y mixed_audio%s' % (tempOut, input1, TAIL, ext)
         else:
-            cmd = 'ffmpeg -i %s -i %s -filter_complex acrossfade=d=%s:c1=qua:c2=qua -y %s' % (tempOut, input1, TAIL, tempOut)
+            cmd = 'ffmpeg -i %s -i %s -filter_complex acrossfade=d=%s -y %s' % (tempOut, input1, TAIL, tempOut)
 
         print(cmd)
-        #subprocess.call(cmd, shell=True)
-
+        subprocess.call(cmd, shell=True)
 
 
