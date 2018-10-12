@@ -2,8 +2,8 @@ import glob
 import subprocess
 
 DIR = r'/home/runan/Documents/mesical/clips/'
-#MUSIC = ('C2 C2')
-MUSIC = ('C2 C2 G2 G1 G2 G2 A4 F1 G1')
+MUSIC = ('C2 C2')
+#MUSIC = ('C2 C2 G2 G1 G2 G2 A4 F1 G1')
 WHOLENOTE = 500 #based on 120 bpm
 #TMPDIR = r'/home/runan/Documents/mesical/temp/'
 #MUSIC = ('D1 CS1 D1 D1 CS1 A1 E1 FS1 D1 D1 CS1 B1 CS1 FS1 A1 B1 G1 FS1 E1 G1 FS1 E1 D1 CS1 B1 A1 G1 FS1 E1 G1 FS1 E1 G1 FS1 E1 G1 FS1 E1 D1 E1 FS1 G1 A1 E1 A1 G1 FS1 B1 G1 A1 G1 D1 B1 B1 CS1 D1 CS1 B1 A1 G1 FS1 E1 B1 A1 B1 A1 G1 FS1 FS1 E1 D1 FS1 B1 A1 B1 CS1 D1 D1 CS1 B1 D1 D1 D1' )
@@ -49,18 +49,19 @@ def mixAllfade(dir = DIR,   ext = '.mp3', fileName = 'mixedOutput'):
     delays = ''
     mix = ''
     #   the start time of music in milliseconds
-    musicTime = 10
+    musicTime = 0
 
     for i in range(lenNotes):
         chords += '-i %s%s%s '%(DIR, notes[i][0], ext)
-        delays += '[%s]adelay=%s|%s[chord%s];' % (i, musicTime, musicTime, i)
-        mix += '[chord%s]' % str(i)
+        delays += '[%s]adelay=%s|%s[chord%s];' % (str(i+1), musicTime, musicTime, str(i+1))
+        mix += '[chord%s]' % str(i+1)
         musicTime += int(WHOLENOTE/int(notes[i][1]))
 
-    cmd =  'ffmpeg %s -filter_complex "%s %samix=%s" %s%s%s' % (chords, delays, mix, lenNotes, DIR, fileName, ext)
+    cmd =  'ffmpeg %s -filter_complex "%s [0]%s amix=%s" %s%s%s' % (chords, delays, mix, lenNotes+1, DIR, fileName, ext)
     print(cmd)
 
     #   calling window OS cmd line to run function
     subprocess.call(cmd, shell=True)
+
 
 
