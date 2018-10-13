@@ -3,11 +3,9 @@ import subprocess
 
 DIR = r'/home/runan/Documents/mesical/clips/'
 OUTDIR = r'/home/runan/Documents/mesical/outDir/'
-MUSIC = ('D-1 CS-1 D-1 D-1 CS-1 A-1 E-1 FS-1 D-1 D-1 CS-1 B-1')
+#MUSIC = ('D-1 CS-1 D-1 D-1 CS-1 A-1 E-1 FS-1 D-1 D-1 CS-1 B-1')
+MUSIC = ('C-1 C-1 G-1 G-1 A-1 A-1 G-1 F-1 F-1 E-1 E-1 D-1 D-1 C-1')
 WHOLENOTE = 500 #based on 120 bpm
-#MUSIC = ('D1 CS1 D1 D1 CS1 A1 E1 FS1 D1 D1 CS1 B1 CS1 FS1 A1 B1 G1 FS1 E1 G1 FS1 E1 D1 CS1 B1 A1 G1 FS1 E1 G1 FS1 E1 G1 FS1 E1 G1 FS1 E1 D1 E1 FS1 G1 A1 E1 A1 G1 FS1 B1 G1 A1 G1 D1 B1 B1 CS1 D1 CS1 B1 A1 G1 FS1 E1 B1 A1 B1 A1 G1 FS1 FS1 E1 D1 FS1 B1 A1 B1 CS1 D1 D1 CS1 B1 D1 D1 D1' )
-#MUSIC = ('C C G G A A G G F F E E D D C C G G F F E E D D G G F F E E D D C C G G A A G G F F E E D D C C')
-#MUSIC = ('A1 G1 C1')
 
 
 def musicNoteDir(filePath = DIR, ext = '.mp3'):
@@ -58,11 +56,16 @@ def mixAllfade(dir = DIR,   ext = '.mp3', fileName = 'mixedOutput'):
         #   last part of the ffmpeg command
         mix += '[chord%s]' % str(i)
         musicTime += int(WHOLENOTE/int(notes[i].split('-')[1]))
-
+    #   command line for ffmpeg
     cmd =  'ffmpeg %s -filter_complex "%s %samix=%s" -y %s%s%s' % (chords, delays, mix, lenNotes, OUTDIR, fileName, ext)
-    print(cmd)
 
     #   calling window OS cmd line to run function
     subprocess.call(cmd, shell=True)
+
+    # amplify sound
+    cmd2 = 'ffmpeg -i %s%s%s -af loudnorm=I=-5:TP=0 -y %s%s2%s' % (OUTDIR, fileName, ext, OUTDIR, fileName, ext)
+    print(cmd2)
+    subprocess.call(cmd2, shell=True)
+
 
 

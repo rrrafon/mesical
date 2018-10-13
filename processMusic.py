@@ -6,7 +6,7 @@ DIR = r'/home/runan/Documents/mesical/clips/'
 NOTES = [1, 0.5, .25, 0.125, 0.0625]  # whole nte, half, quarter, 1/8, .0625
 TAIL = 0.1 #in seconds
 
-def musicNoteFiles(filePath= DIR, fileName='piano', ext='.wav'):
+def musicNoteFiles(filePath= DIR, fileName='piano', ext='.mp3'):
     '''
     :param filePath: Input the file directory of published files
     :param fileName: file name of assets, eg. CHAR001_Model_v001
@@ -42,6 +42,14 @@ def convertWavToMp3():
         cmd = "ffmpeg -i %s -f mp3 %s.mp3" %(i,name)
         subprocess.call(cmd, shell=True)
         print(cmd)
+
+def trimNotes(noteLen = 1):
+    musicFiles = musicNoteFiles()
+    for music in musicFiles:
+        cmd = 'ffmpeg -i %s -ss 0 -t %s -af "afade=t=out:st=0.7:d=0.2" %s' % (music, noteLen, music.split('/')[-1])
+        subprocess.call(cmd, shell=True)
+
+
 def createNotes(bpm = 120):
     suffix = [1, 2, 4]#, 8, 16]
     musicFiles = musicNoteFiles()[0]
