@@ -2,16 +2,15 @@ import glob
 import subprocess
 
 DIR = r'/home/runan/Documents/mesical/clips/'
-#MUSIC = ('C2 C2')
-MUSIC = ('C2 C2 G2 G1 G2 G2 A4 F1 G1')
-WHOLENOTE = 500 #based on 120 bpm
-#TMPDIR = r'/home/runan/Documents/mesical/temp/'
-#MUSIC = ('D1 CS1 D1 D1 CS1 A1 E1 FS1 D1 D1 CS1 B1 CS1 FS1 A1 B1 G1 FS1 E1 G1 FS1 E1 D1 CS1 B1 A1 G1 FS1 E1 G1 FS1 E1 G1 FS1 E1 G1 FS1 E1 D1 E1 FS1 G1 A1 E1 A1 G1 FS1 B1 G1 A1 G1 D1 B1 B1 CS1 D1 CS1 B1 A1 G1 FS1 E1 B1 A1 B1 A1 G1 FS1 FS1 E1 D1 FS1 B1 A1 B1 CS1 D1 D1 CS1 B1 D1 D1 D1' )
-#MUSIC = ('C C G G A A G G F F E E D D C C G G F F E E D D G G F F E E D D C C G G A A G G F F E E D D C C')
-#MUSIC = ('A1 G1 C1')
+OUTDIR = r'/home/runan/Documents/mesical/outDir/'
+#MUSIC = ('FS-1 E-1 D-1 CS-1 B-1 A-1 B-1 CS-1')
+MUSIC = ('FS-1 O-4 E-1 O-4 D-1 O-4 CS-1 O-4 B-1 O-4 A-1 O-4 B-1 O-4 A-1 FS-1 O-4 E-1 O-4 D-1 O-4 A-1 O-4 B-1 O-4 A-1 O-4 B-1 O-4 A-1 D-4 CS-4 D-4 D-4 CS-4')
+
+#MUSIC = ('C-1 C-1 G-1 G-1 A-1 A-1 G-1 O-1 F-1 F-1 E-1 E-1 D-1 D-1 C-1 O-1 G-1 G-1 F-1 F-1 E-1 E-1 D-1 O-1 G-1 G-1 F-1 F-1 E-1 E-1 D-1 O-4')
+WHOLENOTE = 1000 #based on 120 bpm (1sec)
 
 
-def musicNoteDir(filePath = DIR, ext = '.mp3'):
+def musicNoteDir(filePath = DIR, ext = '.ogg'):
     '''
     This script returns an array of FILES based on given file format
     from the specified folder
@@ -27,12 +26,12 @@ def musicNoteDir(filePath = DIR, ext = '.mp3'):
         # catches an invalid file path
         print('please input file path')
         return
-    mp3filesInDir = [i for i in filesInDir]
+    audioFilesInDir = [i for i in filesInDir]
 
-    return mp3filesInDir
+    return audioFilesInDir
 
 
-def mixAllfade(dir = DIR,   ext = '.mp3', fileName = 'mixedOutput'):
+def mixAllfade(dir = DIR,   ext = '.ogg', fileName = 'mixedOutput'):
     '''
     This script mixes the audio/video based on the given musical chord list
     :param dir: file directory of musical chords
@@ -45,22 +44,30 @@ def mixAllfade(dir = DIR,   ext = '.mp3', fileName = 'mixedOutput'):
     lenNotes = len(notes)
     #   this var will store a list of audio/video file of music
     chords = ''
-    #   this car will store a list of delay filter_complex for ffmpeg
-    delays = ''
-    mix = ''
+    #   this vars will store a list of delay filter_complex for ffmpeg
+    delays = '' # adds delays to make up for the time
+    mix = '' # arbitrary name for index
     #   the start time of music in milliseconds
-    musicTime = 10
+    musicTime = 5 #initial value must be > zero
 
     for i in range(lenNotes):
-        chords += '-i %s%s%s '%(DIR, notes[i][0], ext)
+        #   adds the file path to each note to the code
+        chords += '-i %s%s%s '%(dir, notes[i].split('-')[0], ext)
+        #   sets delay of sound, this overlap each sound
         delays += '[%s]adelay=%s|%s[chord%s];' % (i, musicTime, musicTime, i)
+        #   last part of the ffmpeg command
         mix += '[chord%s]' % str(i)
-        musicTime += int(WHOLENOTE/int(notes[i][1]))
-
-    cmd =  'ffmpeg %s -filter_complex "%s %samix=%s" %s%s%s' % (chords, delays, mix, lenNotes, DIR, fileName, ext)
-    print(cmd)
+        musicTime += int(WHOLENOTE/int(notes[i].split('-')[1]))
+    #   command line for ffmpeg
+    cmd =  'ffmpeg %s -filter_complex "%s %samix=%s" -y %s%s%s' % (chords, delays, mix, lenNotes, OUTDIR, fileName, ext)
 
     #   calling window OS cmd line to run function
     subprocess.call(cmd, shell=True)
+
+    # amplify sound
+    cmd2 = 'ffmpeg -i %s%s%s -af loudnorm=I=-5:TP=0 -y %s%s2%s' % (OUTDIR, fileName, ext, OUTDIR, fileName, ext)
+    print(cmd2)
+    subprocess.call(cmd2, shell=True)
+
 
 
