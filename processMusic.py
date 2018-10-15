@@ -6,17 +6,12 @@ DIR = r'/home/runan/Documents/mesical/clips/'
 NOTES = [1, 0.5, .25, 0.125, 0.0625]  # whole nte, half, quarter, 1/8, .0625
 TAIL = 0.1 #in seconds
 
-def musicNoteFiles(filePath= DIR, fileName='piano', ext='.mp3'):
+def musicNoteFiles(filePath= DIR, ext='.ogg'):
     '''
     :param filePath: Input the file directory of published files
     :param fileName: file name of assets, eg. CHAR001_Model_v001
     :param ext: extention of the filename, eg. '.ma' for Maya Ascii file
     '''
-
-    # This will check for the predefines file format
-    #pattern = r'%s_\B' % (fileName)
-    # files that matches proper format will be saved here
-    #matchingFiles = []
 
     try:
         # Load all files in Published Dir
@@ -25,28 +20,31 @@ def musicNoteFiles(filePath= DIR, fileName='piano', ext='.mp3'):
         print('please input file path')
         return
 
-    # Check files in directory if filename matches the preffered file format
-    # if it matches then append that to the matched file variable
-    #for allfiles in filesInPubDir:
-        #match = re.findall(pattern, allfiles)
-        #if match:
-        #    matchingFiles.append(allfiles)
-
     return(filesInPubDir)#, matchingFiles]
 
-def convertWavToMp3():
-    musicFiles = musicNoteFiles()
-    print(musicFiles)
-    for i in musicFiles:
-        name = i.split('/')[-1].split('.')[0]
-        cmd = "ffmpeg -i %s -f mp3 %s.mp3" %(i,name)
-        subprocess.call(cmd, shell=True)
-        print(cmd)
+def trimNotes(noteLen = 1.4, fadeOut = 0.4):
+    '''
+    this script trims the audio in specified length and add a fade out effect
+    :param noteLen: length of musical note in seconds
+    :param fadeOut: length of fadeout in seconds
+    :return: none
 
-def trimNotes(noteLen = 1):
+    '''
     musicFiles = musicNoteFiles()
     for music in musicFiles:
-        cmd = 'ffmpeg -i %s -ss 0 -t %s -af "afade=t=out:st=0.7:d=0.2" %s' % (music, noteLen, music.split('/')[-1])
+        cmd = 'ffmpeg -i %s -ss 0 -t %s -af "afade=t=out:st=1:d=%s" %s' % (music, noteLen, music.split('/')[-1], fadeOut)
+        subprocess.call(cmd, shell=True)
+
+def convertAudio(format = 'ogg'):
+    '''
+    This script converts the audio files in the DIR folder to specified format
+    :param format: format the audio will be converted to
+    :return: none
+    '''
+    musicFiles = musicNoteFiles()
+    for i in musicFiles:
+        name = i.split('/')[-1].split('.')[0]
+        cmd = "ffmpeg -i %s -f mp3 %s.%s" % (i, name, format)
         subprocess.call(cmd, shell=True)
 
 
@@ -65,3 +63,11 @@ def createNotes(bpm = 120):
             #print(cmd)
             subprocess.call(cmd, shell=True)
 
+def createSilence(name = 'O'):
+    '''
+    This script creates a silent sound and saves it
+    :param name: file name of silent sound
+    :return: none
+    '''
+    cmd = 'ffmpeg -f lavfi -i anullsrc -t 5 -c:a libvorbis %s.ogg' % name
+    subprocess.call(cmd, shell=True)

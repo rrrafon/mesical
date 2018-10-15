@@ -3,12 +3,14 @@ import subprocess
 
 DIR = r'/home/runan/Documents/mesical/clips/'
 OUTDIR = r'/home/runan/Documents/mesical/outDir/'
-#MUSIC = ('D-1 CS-1 D-1 D-1 CS-1 A-1 E-1 FS-1 D-1 D-1 CS-1 B-1')
-MUSIC = ('C-1 C-1 G-1 G-1 A-1 A-1 G-1 F-1 F-1 E-1 E-1 D-1 D-1 C-1')
-WHOLENOTE = 500 #based on 120 bpm
+#MUSIC = ('FS-1 E-1 D-1 CS-1 B-1 A-1 B-1 CS-1')
+MUSIC = ('FS-1 O-4 E-1 O-4 D-1 O-4 CS-1 O-4 B-1 O-4 A-1 O-4 B-1 O-4 A-1 FS-1 O-4 E-1 O-4 D-1 O-4 A-1 O-4 B-1 O-4 A-1 O-4 B-1 O-4 A-1 D-4 CS-4 D-4 D-4 CS-4')
+
+#MUSIC = ('C-1 C-1 G-1 G-1 A-1 A-1 G-1 O-1 F-1 F-1 E-1 E-1 D-1 D-1 C-1 O-1 G-1 G-1 F-1 F-1 E-1 E-1 D-1 O-1 G-1 G-1 F-1 F-1 E-1 E-1 D-1 O-4')
+WHOLENOTE = 1000 #based on 120 bpm (1sec)
 
 
-def musicNoteDir(filePath = DIR, ext = '.mp3'):
+def musicNoteDir(filePath = DIR, ext = '.ogg'):
     '''
     This script returns an array of FILES based on given file format
     from the specified folder
@@ -24,12 +26,12 @@ def musicNoteDir(filePath = DIR, ext = '.mp3'):
         # catches an invalid file path
         print('please input file path')
         return
-    mp3filesInDir = [i for i in filesInDir]
+    audioFilesInDir = [i for i in filesInDir]
 
-    return mp3filesInDir
+    return audioFilesInDir
 
 
-def mixAllfade(dir = DIR,   ext = '.mp3', fileName = 'mixedOutput'):
+def mixAllfade(dir = DIR,   ext = '.ogg', fileName = 'mixedOutput'):
     '''
     This script mixes the audio/video based on the given musical chord list
     :param dir: file directory of musical chords
@@ -50,7 +52,7 @@ def mixAllfade(dir = DIR,   ext = '.mp3', fileName = 'mixedOutput'):
 
     for i in range(lenNotes):
         #   adds the file path to each note to the code
-        chords += '-i %s%s%s '%(DIR, notes[i].split('-')[0], ext)
+        chords += '-i %s%s%s '%(dir, notes[i].split('-')[0], ext)
         #   sets delay of sound, this overlap each sound
         delays += '[%s]adelay=%s|%s[chord%s];' % (i, musicTime, musicTime, i)
         #   last part of the ffmpeg command
