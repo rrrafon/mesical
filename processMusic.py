@@ -48,9 +48,9 @@ def convertAudio(format = 'ogg'):
         subprocess.call(cmd, shell=True)
 
 
-def createNotes(bpm = 120):
+def createNotes(ext = 'mp3', bpm = 120):
     suffix = [1, 2, 4]#, 8, 16]
-    musicFiles = musicNoteFiles()[0]
+    musicFiles = musicNoteFiles()
 
     for i in suffix:
         numFrames = (60 / bpm)
@@ -59,7 +59,7 @@ def createNotes(bpm = 120):
         # print(numFrames)
         for music in musicFiles:
             name = music.split('/')[-1].split('.')[0]
-            cmd = "ffmpeg -i %s -ss 0 -t %s -c copy %s%s%s.mp3"% (music, sec, DIR, name, i)
+            cmd = "ffmpeg -i %s -ss 0 -t %s -c copy %s%s%s.%s"% (music, sec, DIR, name, i, ext)
             #print(cmd)
             subprocess.call(cmd, shell=True)
 
