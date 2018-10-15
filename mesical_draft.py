@@ -35,24 +35,6 @@ def musicNoteDir(filePath = DIR, ext = '.mp3'):
 
     return audioFilesInDir
 
-def mixAll(dir = DIR, name = 'music_01',ext = '.mp3' ):
-    '''
-    this script mix all audio specified in musical chords
-    :param dir: file directory where all the musical notes are saved
-    :param name: name of the output file
-    :param ext: extention of the input and ouput file
-    :return: none
-    '''
-
-    #---
-    cont = ''
-
-    for i in MUSIC.split(' '):
-        cont+=('%s%s%s|'%(dir, i, ext))
-    cmd = 'ffmpeg -i "concat:%s" -c copy -y %s%s%s' % (cont, OUTDIR, name, ext)
-    subprocess.call(cmd, shell=True)
-
-
 def mixAllfade(dir = DIR,   ext = '.ogg', fileName = 'mixedOutput'):
     '''
     This script mixes the audio/video based on the given musical chord list
@@ -76,7 +58,7 @@ def mixAllfade(dir = DIR,   ext = '.ogg', fileName = 'mixedOutput'):
         #   duration of each note
         duration = int(WHOLENOTE // int(notes[i].split('-')[1]))
         #   adds the file path to each note to the code
-        chords += '-i %s%s%s -ss 0 -t %s -af "afade=t=out:st=0:d=%s" ' % (dir, notes[i].split('-')[0], ext, duration , duration+DELAY )
+        chords += '-i %s%s%s -ss 0 -t %s -af "afade=t=out:st=%s:d=%s" ' % (dir, notes[i].split('-')[0], ext,duration+DELAY, duration , DELAY )
 
         #   sets delay of sound, this overlap each sound
         delays += '[%s]adelay=%s|%s[chord%s];' % (i, musicTime, musicTime, i)
@@ -91,5 +73,5 @@ def mixAllfade(dir = DIR,   ext = '.ogg', fileName = 'mixedOutput'):
 
     # amplify sound
     cmd2 = 'ffmpeg -i %s%s%s -af loudnorm=I=-5:TP=0 -y %s%s2%s' % (OUTDIR, fileName, ext, OUTDIR, fileName, ext)
-    print(cmd2)
+    #print(cmd2)
     subprocess.call(cmd2, shell=True)
