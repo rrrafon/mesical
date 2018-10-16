@@ -3,10 +3,10 @@ import subprocess
 
 
 DIR = r'/home/runan/Documents/mesical/clips/'
-NOTES = [1, 0.5, .25, 0.125, 0.0625]  # whole nte, half, quarter, 1/8, .0625
 TAIL = 0.1 #in seconds
+WHOLENOTE = 2.0 #length of each note in seconds
 
-def musicNoteFiles(filePath= DIR, ext='.ogg'):
+def musicNoteFiles(filePath= DIR, ext='.mp3'):
     '''
     :param filePath: Input the file directory of published files
     :param fileName: file name of assets, eg. CHAR001_Model_v001
@@ -22,7 +22,7 @@ def musicNoteFiles(filePath= DIR, ext='.ogg'):
 
     return(filesInPubDir)#, matchingFiles]
 
-def trimNotes(noteLen = 1.4, fadeOut = 0.4):
+def trimNotes(fadeOut = 0.4):
     '''
     this script trims the audio in specified length and add a fade out effect
     :param noteLen: length of musical note in seconds
@@ -32,7 +32,7 @@ def trimNotes(noteLen = 1.4, fadeOut = 0.4):
     '''
     musicFiles = musicNoteFiles()
     for music in musicFiles:
-        cmd = 'ffmpeg -i %s -ss 0 -t %s -af "afade=t=out:st=1:d=%s" %s' % (music, noteLen, music.split('/')[-1], fadeOut)
+        cmd = 'ffmpeg -i %s -ss 0 -t %s -af "afade=t=out:st=1:d=%s" %s' % (music, WHOLENOTE, music.split('/')[-1], fadeOut)
         subprocess.call(cmd, shell=True)
 
 def convertAudio(format = 'ogg'):
@@ -46,7 +46,6 @@ def convertAudio(format = 'ogg'):
         name = i.split('/')[-1].split('.')[0]
         cmd = "ffmpeg -i %s -f mp3 %s.%s" % (i, name, format)
         subprocess.call(cmd, shell=True)
-
 
 def createNotes(ext = 'mp3', bpm = 120):
     suffix = [1, 2, 4]#, 8, 16]
