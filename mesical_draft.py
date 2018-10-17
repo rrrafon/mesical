@@ -5,16 +5,18 @@ DIR = r'/home/runan/Documents/mesical/clips/'
 OUTDIR = r'/home/runan/Documents/mesical/outDir/'
 EXT = '.ogg'
 OUTNAME = 'audio_output'
-WHOLENOTE = 1 # based on 120 bpm (1sec), length of each note
-DELAY = 0.07 # in seconds, this overlaps music notes
+WHOLENOTE = 1.5 # based on 120 bpm (1sec), length of each note
+DELAY = 0.05 # in seconds, this overlaps music notes
 
 #-------------> twinkle twinkle
 MUSIC = ('C-2 C-2 G-2 G-2 A-2 A-2 G-1 O-4 F-2 F-2 E-2 E-2 D-2 D-2 C-1 O-4 G-2 G-2 F-2 F-2 E-2 E-2 D-1 O-4 G-2 G-2 F-2 F-2 E-2 E-2 D-1')
 
+#-------------> grenade bruno mars (incomplete)
+#MUSIC = ('F-4 F-4 A-2 F-4 F-4 A-2 F-4 F-4 F-4 F-4 F-2 G-2 E-2 E-2 E-4 D-4 E-2 E-2 D-2 E-4 A-4 A-4 F-4 F-4 A-2 F-4 F-4 A-2 F-4 F-4 F-4 F-4 F-2 G-2 E-2 E-2 E-4 D-4 E-2 E-2 D-2 E-4 A-4 A-4 G-4 G-4 F-2')
 
 #MUSIC = ('FS-1 E-1 D-1 CS-1 B-1 A-1 B-1 A-1 FS-1 E-1 D-1 A-1 B-1 A-1 B-1 A-1 D-2 CS-2 D-2 D-2 CS-2')
 
-#MUSIC = ('FS-1 E-1 D-1 CS-1 B-1 A-1 B-1 CS-1')
+#MUSIC = ('C-1 G-1 AB-1 EB-1 F-1 C-1')
 
 #MUSIC = ('D1 CS1 D1 D1 CS1 A1 E1 FS1 D1 D1 CS1 B1 CS1 FS1')# A B G FS E G FS E D CS B A G FS E G FS E G FS E G FS E D E FS G A E A G FS B G A G D B B CS D CS B A G FS E B A B A G FS FS E D FS B A B CS D D CS B D D D' )
 #MUSIC = ('C C G G A A G G F F E E D D C C G G F F E E D D G G F F E E D D C C G G A A G G F F E E D D C C')

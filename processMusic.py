@@ -6,7 +6,7 @@ DIR = r'/home/runan/Documents/mesical/clips/'
 TAIL = 0.1 #in seconds
 WHOLENOTE = 2.0 #length of each note in seconds
 
-def musicNoteFiles(filePath= DIR, ext='.mp3'):
+def musicNoteFiles(filePath= DIR, ext='.wav'):
     '''
     :param filePath: Input the file directory of published files
     :param fileName: file name of assets, eg. CHAR001_Model_v001
@@ -44,7 +44,7 @@ def convertAudio(format = 'ogg'):
     musicFiles = musicNoteFiles()
     for i in musicFiles:
         name = i.split('/')[-1].split('.')[0]
-        cmd = "ffmpeg -i %s -f mp3 %s.%s" % (i, name, format)
+        cmd = "ffmpeg -i %s -acodec libvorbis %s.%s" % (i, name, format)
         subprocess.call(cmd, shell=True)
 
 def createNotes(ext = 'mp3', bpm = 120):
