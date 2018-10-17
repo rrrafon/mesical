@@ -5,7 +5,7 @@ DIR = r'/home/runan/Documents/mesical/clips/'
 OUTDIR = r'/home/runan/Documents/mesical/outDir/'
 EXT = '.ogg'
 OUTNAME = 'audio_output'
-WHOLENOTE = 1.5 # based on 120 bpm (1sec), length of each note
+WHOLENOTE = 1.0 # based on 120 bpm (1sec), length of each note
 DELAY = 0.05 # in seconds, this overlaps music notes
 
 #-------------> twinkle twinkle
